@@ -1,0 +1,124 @@
+﻿ @* @using CareNet_System.ViewModels
+ @model List<BillsViewModels>
+
+ @{
+     ViewData["Title"] = "قائمة الفواتير";
+ }
+
+ <h2 class="mb-4">قائمة الفواتير</h2>
+
+ <table class="table table-striped">
+     <thead>
+         <tr>
+             <th>رقم</th>
+             <th>المريض</th>
+             <th>شركة التأمين</th>
+             <th>الإجمالي</th>
+             <th>طريقة الدفع</th>
+             <th>الحالة</th>
+             <th>التاريخ</th>
+             <th></th>
+         </tr>
+     </thead>
+     <tbody>
+         @foreach (var bill in Model)
+         {
+             <tr>
+                 <td>@bill.Id</td>
+                 <td>@bill.total_amount.ToString("F2")</td>
+                 <td>@bill.Payment_Method</td>
+               
+               
+                 <td>
+                     <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@bill.Id">تفاصيل</a>
+                 </td>
+             </tr>
+         }
+     </tbody>
+ </table>
+ *@
+
+
+
+ @model IEnumerable<CareNet_System.Models.Bills>
+
+@{
+    ViewData["Title"] = "Bills Management";
+}
+
+<div class="container mt-4">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h1>Bills Management</h1>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Create New Bill
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Bill Records</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Bill ID</th>
+                            <th>Patient Name</th>
+                            <th>Total Amount</th>
+                            <th>Payment Method</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>#@item.Id</td>
+                                <td>@(item.patient?.name ?? "N/A")</td>
+                                <td class="text-end">$@item.total_amount.ToString("F2")</td>
+                                <td>
+                                    <span class="badge bg-@(item.Payment_Method == CareNet_System.Models.billMethod.Cash ? "success" : "info")">
+                                        @item.Payment_Method
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+                <span>Total Bills: @Model.Count()</span>
+                <span>Total Amount: $@Model.Sum(b => b.total_amount).ToString("F2")</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Add Bootstrap tooltips
+            $('[title]').tooltip();
+        });
+    </script>
+}

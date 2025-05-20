@@ -2,8 +2,9 @@
 
 namespace CareNet_System.Models
 {
+
     public enum billMethod
-    { Cash , Visa}
+    { Cash, Visa }
     public class Bills
     {
         public int Id { get; set; }
@@ -14,9 +15,12 @@ namespace CareNet_System.Models
 
         public int insurance_id { get; set; }
         [ForeignKey("patient")]
-
         public int patient_id { get; set; }
-         public Patient? patient { get; set; }
+        public Patient? patient { get; set; }
 
     }
 }
+
+
+ 
+

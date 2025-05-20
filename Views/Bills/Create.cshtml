@@ -1,0 +1,124 @@
+﻿@model CareNet_System.ViewModels.BillsViewModels
+
+@{
+    ViewData["Title"] = "Create";
+
+    // SelectList Patients = new SelectList(ViewBag.Patients, "Id", "name");
+    // SelectList PaymentMethods = new SelectList(ViewBag.PaymentMethods,"Text");
+
+}
+
+
+<div class="container mt-4">
+    <div class="row mb-3">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Bills</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Create New</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Create New Bill</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" id="billForm">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card border-light h-100">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">Patient Information</h5>
+@* 
+                                <div class="mb-3">
+                                    <label asp-for="patient_id" class="form-label">Patient</label>
+                                    <select asp-for="patient_id" class="form-select" asp-items="Patients">
+                                        <option value="">-- Select Patient --</option>
+                                    </select>
+                                    <span asp-validation-for="patient_id" class="text-danger"></span>
+                                </div>
+ *@
+                                <div class="mb-3">
+                                    <label asp-for="insurance_id" class="form-label">Insurance ID</label>
+                                    <input asp-for="insurance_id" class="form-control" />
+                                    <span asp-validation-for="insurance_id" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card border-light h-100">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">Payment Details</h5>
+
+                                <div class="mb-3">
+                                    <label asp-for="total_amount" class="form-label">Total Amount ($)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input asp-for="total_amount" class="form-control" type="number" step="0.01" min="0" />
+                                    </div>
+                                    <span asp-validation-for="total_amount" class="text-danger"></span>
+                                </div>
+
+                               @*   <div class="mb-3">
+                                     <label asp-for="Payment_Method" class="form-label">Payment Method</label>
+                                     <div class="d-flex">
+                                         @foreach (var method in PaymentMethods)
+
+
+
+                                         {
+                                             <div class="form-check me-3">
+                                                 <input class="form-check-input" type="radio" name="Payment_Method"
+                                                        id="payment_@method.Text" value="@method.Value"
+                                                 @(method.Value.ToString() == "Cash" ? "checked" : "") />
+                                                 <label class="form-check-label" for="payment_@method.Text">
+                                                     @method.Text
+                                                 </label>
+                                             </div>
+                                         }
+                                    </div>
+                                    <span asp-validation-for="Payment_Method" class="text-danger"></span>
+                                </div> *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Back to List
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-1"></i> Create Bill
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+
+    <script>
+        $(document).ready(function() {
+            $('#billForm').on('submit', function() {
+                if ($(this).valid()) {
+                    // Add loading state to submit button
+                    $('button[type="submit"]').html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Creating...');
+                    $('button[type="submit"]').prop('disabled', true);
+                }
+            });
+        });
+    </script>
+}

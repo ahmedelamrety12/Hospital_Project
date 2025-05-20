@@ -18,8 +18,7 @@ namespace CareNet_System.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=AHMED\\SQLEXPRESS;Initial Catalog=Hospital;Integrated Security=True;Encrypt=False");
-
+            optionsBuilder.UseSqlServer("Data Source = AHMED\\SQLEXPRESS; Initial Catalog = Hospital; Integrated Security = True; Encrypt = False");
         }
     }
 }
