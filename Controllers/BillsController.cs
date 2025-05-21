@@ -209,7 +209,7 @@ namespace CareNet_System.Controllers
                 return NotFound();
             }
 
-            return View(bill);
+            return View("Delete",bill);
         }
 
         // POST: Bills/Delete/5
@@ -233,21 +233,21 @@ namespace CareNet_System.Controllers
 
             ViewBag.PatientId = id;
             ViewBag.PatientName = bills.FirstOrDefault()?.patient?.name ?? "Patient";
-            return View(bills);
+            return View("PatientBills");
         }
 
-        // GET: Bills/InsuranceBills/5
-        public IActionResult InsuranceBills(int id)
-        {
-            var bills = _billRepository.GetBillsByInsuranceId(id);
-            if (bills == null || !bills.Any())
-            {
-                return NotFound();
-            }
+        //// GET: Bills/InsuranceBills/5
+        //public IActionResult InsuranceBills(int id)
+        //{
+        //    var bills = _billRepository.GetBillsByInsuranceId(id);
+        //    if (bills == null || !bills.Any())
+        //    {
+        //        return NotFound();
+        //    }
 
-            ViewBag.InsuranceId = id;
-            return View(bills);
-        }
+        //    ViewBag.InsuranceId = id;
+        //    return View(bills);
+        //}
 
         private bool BillExists(int id)
         {
