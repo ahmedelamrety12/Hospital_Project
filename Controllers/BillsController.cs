@@ -151,7 +151,7 @@ namespace CareNet_System.Controllers
             };
 
             PopulateDropDownLists();
-            return View(billViewModel);
+            return View("Edit",billViewModel);
         }
 
         // POST: Bills/Edit/5
