@@ -1,65 +1,4 @@
-﻿//using CareNet_System.Models;
-//using CareNet_System.Repostatory;
-//using CareNet_System.ViewModels;
-//using Microsoft.AspNetCore.Mvc;
-
-//namespace CareNet_System.Controllers
-//{
-//    public class BillsController : Controller
-//    {
-//        private readonly IBillsRepository _billRepo;
-
-//        public BillsController(IBillsRepository billRepo)
-//        {
-//            _billRepo = billRepo;
-//        }
-
-//        public IActionResult Index()
-//        {
-//            var bills = _billRepo.GetAll().Select(b => new BillsViewModels
-//            {
-//                Id = b.Id,
-//                total_amount = b.total_amount,
-//                Payment_Method = b.Payment_Method.ToString(),
-//                patient_id = b.patient_id,
-//                insurance_id = b.insurance_id
-
-
-//            }).ToList();
-
-//            return View(bills);
-//        }
-
-
-//        public IActionResult Details(int id)
-//        {
-//            var bill = _billRepo.GetById(id);
-//            if (bill == null)
-//            {
-//                return NotFound();
-//            }
-
-//            var viewModel = new BillsViewModels
-//            {
-//                Id = bill.Id,
-//                total_amount = bill.total_amount,
-//                Payment_Method = bill.Payment_Method.ToString(),
-//                patient_id = bill.patient_id,
-//                insurance_id = bill.insurance_id
-
-//            };
-
-//            return View(viewModel);
-//        }
-
-
-
-//    }
-//}
-
-
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -223,18 +162,18 @@ namespace CareNet_System.Controllers
         }
 
         // GET: Bills/PatientBills/5
-        public IActionResult PatientBills(int id)
-        {
-            var bills = _billRepository.GetBillsByPatientId(id);
-            if (bills == null || !bills.Any())
-            {
-                return NotFound();
-            }
+        //public IActionResult PatientBills(int id)
+        //{
+        //    var bills = _billRepository.GetBillsByPatientId(id);
+        //    if (bills == null || !bills.Any())
+        //    {
+        //        return NotFound();
+        //    }
 
-            ViewBag.PatientId = id;
-            ViewBag.PatientName = bills.FirstOrDefault()?.patient?.name ?? "Patient";
-            return View("PatientBills");
-        }
+        //    ViewBag.PatientId = id;
+        //    ViewBag.PatientName = bills.FirstOrDefault()?.patient?.name ?? "Patient";
+        //    return View("PatientBills");
+        //}
 
         //// GET: Bills/InsuranceBills/5
         //public IActionResult InsuranceBills(int id)
