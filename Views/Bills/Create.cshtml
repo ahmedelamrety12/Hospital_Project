@@ -22,8 +22,8 @@
             <h4 class="mb-0">Create New Bill</h4>
         </div>
         <div class="card-body">
-            <form asp-action="Create" id="billForm">
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            <form asp-action="Create">
+                <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
 
                 <div class="row mb-4">
                     <div class="col-md-6">
@@ -87,9 +87,7 @@
                     <a asp-action="Index" class="btn btn-secondary">
                         <i class="bi bi-arrow-left me-1"></i> Back to List
                     </a>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-save me-1"></i> Create Bill
-                    </button>
+                    <button type="submit" class="btn btn-primary">Create Bill</button>
                 </div>
             </form>
         </div>
