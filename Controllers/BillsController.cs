@@ -64,11 +64,11 @@ namespace CareNet_System.Controllers
 
                 _billRepository.Add(bill);
                 _billRepository.Save();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
 
             PopulateDropDownLists();
-            return View(billViewModel);
+            return View("Create",billViewModel);
         }
 
         // GET: Bills/Edit/5
