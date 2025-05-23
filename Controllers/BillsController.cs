@@ -43,7 +43,12 @@ namespace CareNet_System.Controllers
         public IActionResult Create()
         {
             var viewmodel = new BillsViewModels();
-            PopulateDropDownLists();
+            var patients = _context.Patients
+                .OrderBy(p => p.name)
+                .Select(p => new { p.Id, p.name })
+                .ToList();
+
+            ViewBag.Patients = patients;
             return View(viewmodel);
         }
 
@@ -85,15 +90,27 @@ namespace CareNet_System.Controllers
                 ModelState.AddModelError("", $"Error saving bill: {ex.Message}");
                 // Log the exception here
             }
+            var patients = _context.Patients
+                .OrderBy(p => p.name)
+                .Select(p => new { p.Id, p.name })
+                .ToList();
+
+            ViewBag.Patients = patients;
 
             // Repopulate dropdowns if we need to return to the view
-            PopulateDropDownLists();
             return View(billViewModel);
         }
 
         // GET: Bills/Edit/5
         public IActionResult Edit(int id)
         {
+            var patients = _context.Patients
+                .OrderBy(p => p.name)
+                .Select(p => new { p.Id, p.name })
+                .ToList();
+
+            ViewBag.Patients = patients;
+
             var bill = _billRepository.GetById(id);
             if (bill == null)
             {
@@ -109,7 +126,6 @@ namespace CareNet_System.Controllers
                 insurance_id = bill.insurance_id
             };
 
-            PopulateDropDownLists();
             return View("Edit", billViewModel);
         }
 
@@ -155,7 +171,12 @@ namespace CareNet_System.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            PopulateDropDownLists();
+            var patients = _context.Patients
+                .OrderBy(p => p.name)
+                .Select(p => new { p.Id, p.name })
+                .ToList();
+
+            ViewBag.Patients = patients;
             return View(billViewModel);
         }
 
@@ -213,23 +234,5 @@ namespace CareNet_System.Controllers
             return _billRepository.GetById(id) != null;
         }
 
-        private void PopulateDropDownLists()
-        {
-            // Convert enum values to SelectListItems with proper Text and Value
-            //ViewBag.PaymentMethods = Enum.GetValues(typeof(billMethod))
-            //    .Cast<billMethod>()
-            //    .Select(v => new SelectListItem
-            //    {
-            //        Text = v.ToString(),
-            //        Value = v.ToString()
-            //    }).ToList();
-
-            var patients = _context.Patients
-                .OrderBy(p => p.name)
-                .Select(p => new { p.Id, p.name })
-                .ToList();
-
-            ViewBag.Patients = new SelectList(patients, "Id", "name");
-        }
     }
 }
