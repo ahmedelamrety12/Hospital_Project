@@ -15,10 +15,8 @@ namespace CareNet_System.Models
         [ForeignKey("staff")]
         public int followUp_doctorID { get; set; }
         
-
         [Column(TypeName = "nvarchar(50)")]
         public TreatmentType? treatment { get; set; }
-
 
         [ForeignKey("department")]
         public int dept_id { get; set; }

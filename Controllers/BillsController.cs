@@ -57,9 +57,8 @@ namespace CareNet_System.Controllers
                 var bill = new Bills
                 {
                     total_amount = billViewModel.total_amount,
-                    Payment_Method = (billMethod)Enum.Parse(typeof(billMethod), billViewModel.Payment_Method),
+                   /* Payment_Method = (billMethod)Enum.Parse(typeof(billMethod), billViewModel.Payment_Method)*/,
                     patient_id = billViewModel.patient_id,
-                    insurance_id = billViewModel.insurance_id
                 };
 
                 _billRepository.Add(bill);
