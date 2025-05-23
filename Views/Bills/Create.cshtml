@@ -32,7 +32,7 @@
 
                                 <div class="mb-3">
                                     <label asp-for="patient_id" class="form-label">Patient</label>
-                                    <select asp-for="patient_id" class="form-select" asp-items="@(new SelectList(ViewBag.Patients, "Id", "Name"))">
+                                    <select asp-for="patient_id" class="form-select" asp-items="@(new SelectList(ViewBag.Patients, "Id", "name"))">
                                         <option value="">-- Select Patient --</option>
                                     </select>
                                     <span asp-validation-for="patient_id" class="text-danger"></span>

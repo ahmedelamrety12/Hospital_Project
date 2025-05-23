@@ -224,7 +224,7 @@ namespace CareNet_System.Controllers
                     Value = v.ToString()
                 }).ToList();
 
-            ViewBag.Patients = new SelectList(_context.Patients, "Id", "Name");
+            ViewBag.Patients = new SelectList(_context.Patients, "Id", "name");
         }
     }
 }
