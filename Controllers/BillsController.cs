@@ -80,49 +80,78 @@ namespace CareNet_System.Controllers
 
             ViewBag.Patients = patients;
             return View(billViewModel);
-}
+        }
 
-// GET: Bills/Edit/5
-public IActionResult Edit(int id)
-{
-    var patients = _context.Patients
-        .OrderBy(p => p.name)
-        .Select(p => new { p.Id, p.name })
-        .ToList();
+        // GET: Bills/Edit/5
+        public IActionResult Edit(int id)
+        {
+            var patients = _context.Patients
+                .OrderBy(p => p.name)
+                .Select(p => new { p.Id, p.name })
+                .ToList();
 
-    ViewBag.Patients = patients;
+            ViewBag.Patients = patients;
 
-    var bill = _billRepository.GetById(id);
-    if (bill == null)
-    {
-        return NotFound();
-    }
+            var bill = _billRepository.GetById(id);
+            if (bill == null)
+            {
+                return NotFound();
+            }
 
-    var billViewModel = new BillsViewModels
-    {
-        Id = bill.Id,
-        total_amount = bill.total_amount,
-        Payment_Method = bill.Payment_Method.ToString(),
-        patient_id = bill.patient_id,
-        insurance_id = bill.insurance_id
-    };
+            var billViewModel = new BillsViewModels
+            {
+                Id = bill.Id,
+                total_amount = bill.total_amount,
+                Payment_Method = bill.Payment_Method.ToString(),
+                patient_id = bill.patient_id,
+                insurance_id = bill.insurance_id
+            };
 
-    return View("Edit", billViewModel);
-}
+            return View("Edit", billViewModel);
+        }
 
-// POST: Bills/Edit/5
-[HttpPost]
-[ValidateAntiForgeryToken]
-public IActionResult Edit(int id, BillsViewModels billViewModel)
-{
-    if (id != billViewModel.Id)
-    {
-        return NotFound();
-    }
+        // POST: Bills/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, BillsViewModels billViewModel)
+        {
+            if (id != billViewModel.Id)
+            {
+                return NotFound();
+            }
 
-    if (ModelState.IsValid)
-    {
-        try
+            try
+            {
+                var bill = _billRepository.GetById(id);
+                if (bill == null)
+                {
+                    return NotFound();
+                }
+
+                bill.total_amount = billViewModel.total_amount;
+                bill.patient_id = billViewModel.patient_id;
+                bill.insurance_id = billViewModel.insurance_id;
+
+                _billRepository.Update(bill);
+                _billRepository.Save();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(String.Empty, ex.InnerException.Message);
+            }
+
+            var patients = _context.Patients
+                .OrderBy(p => p.name)
+                .Select(p => new { p.Id, p.name })
+                .ToList();
+
+            ViewBag.Patients = patients;
+            return View(billViewModel);
+        }
+
+        // GET: Bills/Delete/5
+        public IActionResult Delete(int id)
         {
             var bill = _billRepository.GetById(id);
             if (bill == null)
@@ -130,96 +159,56 @@ public IActionResult Edit(int id, BillsViewModels billViewModel)
                 return NotFound();
             }
 
-            bill.total_amount = billViewModel.total_amount;
-            bill.Payment_Method = (billMethod)Enum.Parse(typeof(billMethod), billViewModel.Payment_Method);
-            bill.patient_id = billViewModel.patient_id;
-            bill.insurance_id = billViewModel.insurance_id;
+            var billVM = new BillsViewModels()
+            {
+                Id = bill.Id,
+                total_amount = bill.total_amount
+            };
 
-            _billRepository.Update(bill);
-            _billRepository.Save();
+            return View("Delete", billVM);
         }
-        catch (Exception)
+
+        // POST: Bills/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
         {
-            if (!BillExists(id))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
+            _billRepository.Delete(id);
+            _billRepository.Save();
+            return RedirectToAction(nameof(Index));
         }
-        return RedirectToAction(nameof(Index));
-    }
 
-    var patients = _context.Patients
-        .OrderBy(p => p.name)
-        .Select(p => new { p.Id, p.name })
-        .ToList();
+        // GET: Bills/PatientBills/5
+        //public IActionResult PatientBills(int id)
+        //{
+        //    var bills = _billRepository.GetBillsByPatientId(id);
+        //    if (bills == null || !bills.Any())
+        //    {
+        //        return NotFound();
+        //    }
 
-    ViewBag.Patients = patients;
-    return View(billViewModel);
-}
+        //    ViewBag.PatientId = id;
+        //    ViewBag.PatientName = bills.FirstOrDefault()?.patient?.name ?? "Patient";
+        //    return View("PatientBills");
+        //}
 
-// GET: Bills/Delete/5
-public IActionResult Delete(int id)
-{
-    var bill = _billRepository.GetById(id);
-    if (bill == null)
-    {
-        return NotFound();
-    }
+        //// GET: Bills/InsuranceBills/5
+        //public IActionResult InsuranceBills(int id)
+        //{
+        //    var bills = _billRepository.GetBillsByInsuranceId(id);
+        //    if (bills == null || !bills.Any())
+        //    {
+        //        return NotFound();
+        //    }
 
-    var billVM = new BillsViewModels()
-    {
-        Id = bill.Id,
-        total_amount = bill.total_amount
-    };
+        //    ViewBag.InsuranceId = id;
+        //    return View(bills);
+        //}
 
-    return View("Delete", billVM);
-}
-
-// POST: Bills/Delete/5
-[HttpPost]
-[ValidateAntiForgeryToken]
-public IActionResult DeleteConfirmed(int id)
-{
-    _billRepository.Delete(id);
-    _billRepository.Save();
-    return RedirectToAction(nameof(Index));
-}
-
-// GET: Bills/PatientBills/5
-//public IActionResult PatientBills(int id)
-//{
-//    var bills = _billRepository.GetBillsByPatientId(id);
-//    if (bills == null || !bills.Any())
-//    {
-//        return NotFound();
-//    }
-
-//    ViewBag.PatientId = id;
-//    ViewBag.PatientName = bills.FirstOrDefault()?.patient?.name ?? "Patient";
-//    return View("PatientBills");
-//}
-
-//// GET: Bills/InsuranceBills/5
-//public IActionResult InsuranceBills(int id)
-//{
-//    var bills = _billRepository.GetBillsByInsuranceId(id);
-//    if (bills == null || !bills.Any())
-//    {
-//        return NotFound();
-//    }
-
-//    ViewBag.InsuranceId = id;
-//    return View(bills);
-//}
-
-private bool BillExists(int id)
-{
-    return _billRepository.GetById(id) != null;
-}
+        private bool BillExists(int id)
+        {
+            return _billRepository.GetById(id) != null;
+        }
 
     }
 }

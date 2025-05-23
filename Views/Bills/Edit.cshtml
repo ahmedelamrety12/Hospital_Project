@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit";
+    SelectList Patients = new SelectList(ViewBag.Patients, "Id", "name");
 }
 
 <div class="container mt-4">
@@ -21,28 +22,27 @@
             <h4 class="mb-0">Edit Bill</h4>
         </div>
         <div class="card-body">
-            <form asp-action="Edit" id="billForm">
+            <form asp-action="Edit">
                 <input type="hidden" asp-for="Id" /> <!-- Assuming there's an Id field -->
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
 
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <div class="card border-light h-100">
                             <div class="card-body">
                                 <h5 class="card-title mb-3">Patient Information</h5>
-                                @* 
                                 <div class="mb-3">
-                                    <label asp-for="patient_id" class="form-label">Patient</label>
-                                    <select asp-for="patient_id" class="form-select" asp-items="Patients">
-                                        <option value="">-- Select Patient --</option>
-                                    </select>
-                                    <span asp-validation-for="patient_id" class="text-danger"></span>
+	                                <label asp-for="patient_id" class="form-label">Patient</label>
+	                                <select asp-for="patient_id" class="form-select" asp-items="Patients">
+		                                <option value="">-- Select Patient --</option>
+	                                </select>
+	                                <span asp-validation-for="patient_id" class="text-danger"></span>
                                 </div>
-                                *@
+
                                 <div class="mb-3">
-                                    <label asp-for="insurance_id" class="form-label">Insurance ID</label>
-                                    <input asp-for="insurance_id" class="form-control" />
-                                    <span asp-validation-for="insurance_id" class="text-danger"></span>
+	                                <label asp-for="insurance_id" class="form-label">Insurance ID</label>
+	                                <input asp-for="insurance_id" class="form-control" />
+	                                <span asp-validation-for="insurance_id" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
