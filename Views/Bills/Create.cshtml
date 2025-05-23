@@ -2,12 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
-
-    // SelectList Patients = new SelectList(ViewBag.Patients, "Id", "name");
-    // SelectList PaymentMethods = new SelectList(ViewBag.PaymentMethods,"Text");
-
 }
-
 
 <div class="container mt-4">
     <div class="row mb-3">
@@ -34,18 +29,18 @@
                         <div class="card border-light h-100">
                             <div class="card-body">
                                 <h5 class="card-title mb-3">Patient Information</h5>
-@* 
+
                                 <div class="mb-3">
                                     <label asp-for="patient_id" class="form-label">Patient</label>
-                                    <select asp-for="patient_id" class="form-select" asp-items="Patients">
+                                    <select asp-for="patient_id" class="form-select" asp-items="@(new SelectList(ViewBag.Patients, "Id", "Name"))">
                                         <option value="">-- Select Patient --</option>
                                     </select>
                                     <span asp-validation-for="patient_id" class="text-danger"></span>
                                 </div>
- *@
+
                                 <div class="mb-3">
-                                    <label asp-for="patient_id" class="form-label">Insurance ID</label>
-                                    <input asp-for="patient_id" class="form-control" />
+                                    <label asp-for="insurance_id" class="form-label">Insurance ID</label>
+                                    <input asp-for="insurance_id" class="form-control" />
                                     <span asp-validation-for="insurance_id" class="text-danger"></span>
                                 </div>
                             </div>
@@ -66,26 +61,22 @@
                                     <span asp-validation-for="total_amount" class="text-danger"></span>
                                 </div>
 
-                               @*   <div class="mb-3">
-                                     <label asp-for="Payment_Method" class="form-label">Payment Method</label>
-                                     <div class="d-flex">
-                                         @foreach (var method in PaymentMethods)
-
-
-
-                                         {
-                                             <div class="form-check me-3">
-                                                 <input class="form-check-input" type="radio" name="Payment_Method"
-                                                        id="payment_@method.Text" value="@method.Value"
-                                                 @(method.Value.ToString() == "Cash" ? "checked" : "") />
-                                                 <label class="form-check-label" for="payment_@method.Text">
-                                                     @method.Text
-                                                 </label>
-                                             </div>
-                                         }
+                                <div class="mb-3">
+                                    <label asp-for="Payment_Method" class="form-label">Payment Method</label>
+                                    <div class="d-flex">
+                                        @foreach (var method in (IEnumerable<SelectListItem>)ViewBag.PaymentMethods)
+                                        {
+                                            <div class="form-check me-3">
+                                                <input asp-for="Payment_Method" class="form-check-input" type="radio" value="@method.Value"
+                                                       id="payment_@method.Text" checked="@(method.Value == "Cash")" />
+                                                <label class="form-check-label" for="payment_@method.Text">
+                                                    @method.Text
+                                                </label>
+                                            </div>
+                                        }
                                     </div>
                                     <span asp-validation-for="Payment_Method" class="text-danger"></span>
-                                </div> *@
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -107,16 +98,16 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-
     }
 
     <script>
         $(document).ready(function() {
-            $('#billForm').on('submit', function() {
+            $('#billForm').on('submit', function(e) {
                 if ($(this).valid()) {
-                    // Add loading state to submit button
                     $('button[type="submit"]').html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Creating...');
                     $('button[type="submit"]').prop('disabled', true);
+                } else {
+                    e.preventDefault();
                 }
             });
         });

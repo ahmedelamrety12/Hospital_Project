@@ -47,27 +47,48 @@ namespace CareNet_System.Controllers
             return View(viewmodel);
         }
 
-        // POST: Bills/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(BillsViewModels billViewModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var bill = new Bills
+                if (ModelState.IsValid)
                 {
-                    total_amount = billViewModel.total_amount,
-                   /* Payment_Method = (billMethod)Enum.Parse(typeof(billMethod), billViewModel.Payment_Method)*/,
-                    patient_id = billViewModel.patient_id,
-                };
+                    // Validate Payment_Method
+                    if (string.IsNullOrEmpty(billViewModel.Payment_Method))
+                    {
+                        ModelState.AddModelError("Payment_Method", "Payment method is required");
+                    }
+                    else if (!Enum.TryParse(billViewModel.Payment_Method, out billMethod paymentMethod))
+                    {
+                        ModelState.AddModelError("Payment_Method", "Invalid payment method selected");
+                    }
+                    else
+                    {
+                        var bill = new Bills
+                        {
+                            total_amount = billViewModel.total_amount,
+                            Payment_Method = paymentMethod,
+                            patient_id = billViewModel.patient_id,
+                            insurance_id = billViewModel.insurance_id
+                        };
 
-                _billRepository.Add(bill);
-                _billRepository.Save();
-                return RedirectToAction("Index");
+                        _billRepository.Add(bill);
+                        _billRepository.Save();
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error saving bill: {ex.Message}");
+                // Log the exception here
             }
 
+            // Repopulate dropdowns if we need to return to the view
             PopulateDropDownLists();
-            return View("Create",billViewModel);
+            return View(billViewModel);
         }
 
         // GET: Bills/Edit/5
@@ -89,7 +110,7 @@ namespace CareNet_System.Controllers
             };
 
             PopulateDropDownLists();
-            return View("Edit",billViewModel);
+            return View("Edit", billViewModel);
         }
 
         // POST: Bills/Edit/5
@@ -147,7 +168,7 @@ namespace CareNet_System.Controllers
                 return NotFound();
             }
 
-            return View("Delete",bill);
+            return View("Delete", bill);
         }
 
         // POST: Bills/Delete/5
@@ -194,9 +215,16 @@ namespace CareNet_System.Controllers
 
         private void PopulateDropDownLists()
         {
-            ViewBag.PaymentMethods = new SelectList(Enum.GetValues(typeof(billMethod)));
+            // Convert enum values to SelectListItems with proper Text and Value
+            ViewBag.PaymentMethods = Enum.GetValues(typeof(billMethod))
+                .Cast<billMethod>()
+                .Select(v => new SelectListItem
+                {
+                    Text = v.ToString(),
+                    Value = v.ToString()
+                }).ToList();
+
             ViewBag.Patients = new SelectList(_context.Patients, "Id", "Name");
-           
         }
     }
 }
