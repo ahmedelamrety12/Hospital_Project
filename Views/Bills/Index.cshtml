@@ -1,46 +1,4 @@
-﻿ @* @using CareNet_System.ViewModels
- @model List<BillsViewModels>
-
- @{
-     ViewData["Title"] = "قائمة الفواتير";
- }
-
- <h2 class="mb-4">قائمة الفواتير</h2>
-
- <table class="table table-striped">
-     <thead>
-         <tr>
-             <th>رقم</th>
-             <th>المريض</th>
-             <th>شركة التأمين</th>
-             <th>الإجمالي</th>
-             <th>طريقة الدفع</th>
-             <th>الحالة</th>
-             <th>التاريخ</th>
-             <th></th>
-         </tr>
-     </thead>
-     <tbody>
-         @foreach (var bill in Model)
-         {
-             <tr>
-                 <td>@bill.Id</td>
-                 <td>@bill.total_amount.ToString("F2")</td>
-                 <td>@bill.Payment_Method</td>
-               
-               
-                 <td>
-                     <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@bill.Id">تفاصيل</a>
-                 </td>
-             </tr>
-         }
-     </tbody>
- </table>
- *@
-
-
-
- @model IEnumerable<CareNet_System.Models.Bills>
+﻿@model IEnumerable<CareNet_System.Models.Bills>
 
 @{
     ViewData["Title"] = "Bills Management";
@@ -71,7 +29,7 @@
                             <th>Patient Name</th>
                             <th>Total Amount</th>
                             <th>Payment Method</th>
-                            <th>Actions</th>
+                            <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,15 +44,21 @@
                                         @item.Payment_Method
                                     </span>
                                 </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary" title="View Details">
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a asp-action="Details" asp-route-id="@item.Id"
+                                           class="btn btn-sm btn-outline-primary"
+                                           title="View Details">
                                             <i class="bi bi-eye"></i>
                                         </a>
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary" title="Edit">
+                                        <a asp-action="Edit" asp-route-id="@item.Id"
+                                           class="btn btn-sm btn-outline-secondary"
+                                           title="Edit">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Delete">
+                                        <a asp-action="Delete" asp-route-id="@item.Id"
+                                           class="btn btn-sm btn-outline-danger"
+                                           title="Delete">
                                             <i class="bi bi-trash"></i>
                                         </a>
                                     </div>

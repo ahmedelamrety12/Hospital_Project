@@ -170,11 +170,17 @@ public IActionResult Delete(int id)
         return NotFound();
     }
 
-    return View("Delete", bill);
+    var billVM = new BillsViewModels()
+    {
+        Id = bill.Id,
+        total_amount = bill.total_amount
+    };
+
+    return View("Delete", billVM);
 }
 
 // POST: Bills/Delete/5
-[HttpPost, ActionName("Delete")]
+[HttpPost]
 [ValidateAntiForgeryToken]
 public IActionResult DeleteConfirmed(int id)
 {
