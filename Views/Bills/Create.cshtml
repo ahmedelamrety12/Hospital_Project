@@ -61,7 +61,7 @@
                                     <span asp-validation-for="total_amount" class="text-danger"></span>
                                 </div>
 
-                                <div class="mb-3">
+                               @*  <div class="mb-3">
                                     <label asp-for="Payment_Method" class="form-label">Payment Method</label>
                                     <div class="d-flex">
                                         @foreach (var method in (IEnumerable<SelectListItem>)ViewBag.PaymentMethods)
@@ -76,7 +76,7 @@
                                         }
                                     </div>
                                     <span asp-validation-for="Payment_Method" class="text-danger"></span>
-                                </div>
+                                </div> *@
                             </div>
                         </div>
                     </div>

@@ -216,15 +216,20 @@ namespace CareNet_System.Controllers
         private void PopulateDropDownLists()
         {
             // Convert enum values to SelectListItems with proper Text and Value
-            ViewBag.PaymentMethods = Enum.GetValues(typeof(billMethod))
-                .Cast<billMethod>()
-                .Select(v => new SelectListItem
-                {
-                    Text = v.ToString(),
-                    Value = v.ToString()
-                }).ToList();
+            //ViewBag.PaymentMethods = Enum.GetValues(typeof(billMethod))
+            //    .Cast<billMethod>()
+            //    .Select(v => new SelectListItem
+            //    {
+            //        Text = v.ToString(),
+            //        Value = v.ToString()
+            //    }).ToList();
 
-            ViewBag.Patients = new SelectList(_context.Patients, "Id", "name");
+            var patients = _context.Patients
+                .OrderBy(p => p.name)
+                .Select(p => new { p.Id, p.name })
+                .ToList();
+
+            ViewBag.Patients = new SelectList(patients, "Id", "name");
         }
     }
 }
