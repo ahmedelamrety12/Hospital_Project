@@ -105,7 +105,7 @@ namespace CareNet_System.Controllers
         {
             var viewmodel = new BillsViewModels();
             PopulateDropDownLists();
-            return View("Create", viewmodel);
+            return View(viewmodel);
         }
 
         // POST: Bills/Create
